@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+    <title>Document</title>
+</head>
+<body>
+
+
+    <main> 
+        
+        <div class="leftSpalt">
+
+            <div class="homeContainer">
+
+                <div id="addTaskContainerLeftSpalt">
+                    <h4 id="addTaskLeftSpalt"> Add task</h4>
+                </div>
+       
+            </div>
+        
+
+            <div>
+
+                <div class="projectContainerIcon">
+                    <h4> My projects</h4> 
+               
+                </div>
+
+            </div>
+           
+        </div>
+
+
+
+        <div class="mainPageDiv">
+        
+        </div>   
+               <div class="addProjectFormContainer">
+                    <form class="addProjectForm">
+          
+
+                        <input type="text" name="newProject" id="newProject" placeholder="Project name">
+                        <div class="buttonAddProjectContainer">
+                            <button id="buttonAddProjectCancel">Cancel</button>
+                            <button id="buttonAddProject" disabled>Add Project</button>
+                       
+                        </div>
+     
+                    </form>
+                </div> 
+
+
+
+                <div class="addTaskFormContainer">
+                    <form class="addTaskForm">
+            
+
+                        <input type="text" id="title" name="title" placeholder="Task name">
+                        <textarea rows="5" cols="20" name="description" id="description" placeholder="Description"></textarea>
+          
+
+                        <div class="date-priority">
+
+                            <input type="datetime-local" name="date" id="date">
+                            <select name="priority" id="priority">
+                                <option> Priority</option>
+                                <option value="p1">🟥  Priority 1 </option>
+                                <option value="p2"> 🟧  Priority 2</option>
+                                <option value="p3">🟦  Priority 3 </option>
+                                <option value="p4">⬜  Priority 4</option>
+                            </select>
+
+                
+                        </div>
+
+          
+                        <div class="containerButtons">
+
+                            <select name="project" id="project">
+                                <option> Project</option>
+                   
+    
+                            </select>
+
+                            <div class="buttonTask">
+                                <button id="buttonCancel"> Cancel </button>
+                                <button id="buttonAddTask"> Add task </button>
+                                <button id="buttonEditTask"> Edit task </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+               
+
+  
+
+                
+         
+        
+    </main>
+</body>
+</html>
