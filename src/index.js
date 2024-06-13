@@ -7,6 +7,12 @@ document.addEventListener('submit', function(event) {
 
 
 
+function populateStorage() {
+    localStorage.setItem("theProjects", JSON.stringify(projects));
+    console.log(JSON.parse(localStorage.getItem('theProjects'))[0].tasks)
+  }
+
+
 const homeProject = {
 
     name: "Home",
@@ -23,7 +29,7 @@ function addProject(projectName) {
     
     projects.push(project);
 
-    
+    populateStorage()
 }
 
 function projectAdd() {
@@ -38,8 +44,10 @@ function projectAdd() {
         projectH4.textContent='My Projects'
         projectContainer.innerHTML=""
         projectContainer.appendChild(projectH4)
-        console.log(projects)
 
+        
+        const projectElementSelect = document.getElementById('project')
+        projectElementSelect.innerHTML=""
 
         projects.forEach( (project, index) => {
 
@@ -55,26 +63,39 @@ function projectAdd() {
                 
                 const mainPageDiv=document.querySelector('.mainPageDiv')
                 mainPageDiv.setAttribute('class',`mainPageDiv ${project.name}`)
-                generateProjectPage(project)})
-    
+                generateProjectPageReal()})
+
+            const projectOptions = document.createElement('option')
+            projectOptions.setAttribute('class','projectOptions')
+            projectOptions.textContent=project.name
+            projectOptions.value=project.name
+            projectElementSelect.appendChild(projectOptions)
+                
+            
+            const mainPageDiv = document.querySelector(".mainPageDiv")
+          
+            if (project.name!=="Home") {
+                
+            const projectRemoveButton = document.createElement('div')
+            projectRemoveButton.classList.add("projectRemoveButton")
+            projectRemoveButton.textContent="X"
+            projectH5Div.appendChild(projectRemoveButton)
+            projectRemoveButton.addEventListener('click', function() {
+                projects.splice(index, 1)
+                projectContainer.removeChild(projectH5Div)
+                projectElementSelect.removeChild(projectOptions)
+                mainPageDiv.setAttribute('class','mainPageDiv Home')
+                populateStorage()
+                generateProjectPageReal()
+                
+                }   
+            )
+        }
+
+
     })
 
 
-    const projectElementSelect = document.getElementById('project')
-    projectElementSelect.innerHTML=""
-
-    projects.forEach( (project) => {
-
-        const projectOptions = document.createElement('option')
-        projectOptions.setAttribute('class','projectOptions')
-        projectOptions.textContent=project.name
-        projectOptions.value=project.name
-        projectElementSelect.appendChild(projectOptions)
-        
-
-
-    })
-    
 } 
 
 function toDo (title, description, dueDate, priority) {  
@@ -98,15 +119,16 @@ function addToDo() {
     let priority=document.getElementById("priority").value
 
   
-     if (!title || !description || !dueDate|| !priority) {
+    if (!title || !description || !dueDate|| !priority) {
       alert('All fields must be filled out.');
       return;
-    }
+    } 
 
     projects.forEach((project) => {
        if(project.name === selectedName)
         {
         project.tasks.push(new toDo(title,description,dueDate, priority));
+        populateStorage()
         }})
 
         
@@ -116,21 +138,21 @@ function addToDo() {
 
     /*render addedTask if on taskPage*/
 
+    generateProjectPageReal()
+        
+}   
+
+function generateProjectPageReal () {
+
     const mainPageDiv = document.querySelector('.mainPageDiv')
     projects.forEach((project)=> {
      
         if(mainPageDiv.className===`mainPageDiv ${project.name}`) {
 
-            generateProjectPage(project)
-            console.log(project.name)
+            generateProjectPage(project) }
+    })
 
-        }
-     })
-
-        
 }
-
-
 
 function generateProjectPage (project) {
 
@@ -155,10 +177,12 @@ function generateProjectPage (project) {
     const multiTaskContainer = document.createElement('div')
     multiTaskContainer.classList.add('multiTaskContainer')
     newPageContainer.appendChild(multiTaskContainer)
+    
+    
 
 
     project.tasks.forEach((task, index) => {
-
+        
         const taskContainer = document.createElement('div')
         taskContainer.setAttribute('class','taskContainer')
         multiTaskContainer.appendChild(taskContainer)
@@ -189,8 +213,11 @@ function generateProjectPage (project) {
         removeButton.setAttribute('class','removeTask')
         taskContainer.appendChild(removeButton)
         removeButton.addEventListener('click', function() {
-            project.tasks.splice(index, 1);
-           multiTaskContainer.removeChild(taskContainer)
+      
+            project.tasks.splice(index, 1)
+            populateStorage();
+            multiTaskContainer.removeChild(taskContainer)
+            generateProjectPageReal()
         })
 
         const editButton = document.createElement('div')
@@ -213,7 +240,7 @@ function generateProjectPage (project) {
 
             function editTaskInput () {
                 
-            console.log(task)
+  
             let title= document.getElementById("title").value;
             let description = document.getElementById("description").value;
             let dueDate= document.getElementById("date").value;
@@ -223,11 +250,11 @@ function generateProjectPage (project) {
             task.description=description
             task.dueDate= dueDate
             task.priority=priority
-            console.log(task)
+           
             
 
-            generateProjectPage(project)
-           
+            generateProjectPageReal()
+            populateStorage()
             }
 
            
@@ -281,14 +308,21 @@ function generateProjectPage (project) {
 }
 
 
-
-
-
+ function getStorage () {
+    if (localStorage.getItem("theProjects")) {
+     
+        projects = JSON.parse(localStorage.getItem("theProjects"))
+      
+      }
+    
+    }
 
 projectAdd()
+getStorage()
+
 const mainPageDiv = document.querySelector('.mainPageDiv')
 mainPageDiv.setAttribute('class',`mainPageDiv ${projects[0].name}`)
-generateProjectPage(projects[0])
+generateProjectPageReal()
 
 /* BUTTON IN ADDPROJECT FUNCTION */
 
@@ -365,6 +399,7 @@ showTaskForm.addEventListener('click', function () {
 const buttonAddTask = document.getElementById("buttonAddTask")
 buttonAddTask.addEventListener('click', function() {
     addToDo()
+
     populateStorage()
 
    
@@ -425,7 +460,6 @@ leftSpaltDiv.addEventListener('mouseenter', function(){
     const icondiv = document.createElement('div')
     projectContainerIconDiv.appendChild(icondiv)
     icondiv.classList.add('iconVisible')
-    console.log(icondiv.classList)
     icondiv.addEventListener('click', function () {
     
         const formContainer = document.querySelector('.addProjectFormContainer')
@@ -444,13 +478,3 @@ leftSpaltDiv.addEventListener('mouseleave', function(){
      
     
  },)
-
-
- function populateStorage() {
-    localStorage.setItem("theProjects", JSON.stringify(projects));
-  }
-function getStorage () {
-  const retrievedProjectItem = JSON.parse(localStorage.getItem("theProjects"))
-  console.log(retrievedProjectItem)
-
-}
